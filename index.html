@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Energy Visualization Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <script type="text/javascript" src="https://public.tableau.com/javascripts/api/tableau-2.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <div class="dashboard-header">
+        <h1>Sample Webpage Design</h1>
+    </div>
+    
+    <div class="dashboard-container">
+        <div class="left-panel">
+            <div class="chart-container">
+                <div id="pieChart"></div>
+                <div id="trendChart"></div>
+            </div>
+        </div>
+        
+        <div class="right-panel">
+            <div class="energy-types">
+                <button class="energy-btn renewable" data-type="renewable">
+                    <img src="wind-icon.png" alt="Renewable">
+                    Renewable Energy
+                </button>
+                <button class="energy-btn coal" data-type="coal">
+                    <img src="coal-icon.png" alt="Coal">
+                    Coal Energy
+                </button>
+                <button class="energy-btn hydro" data-type="hydro">
+                    <img src="hydro-icon.png" alt="Hydro">
+                    Hydroelectric
+                </button>
+                <button class="energy-btn solar" data-type="solar">
+                    <img src="solar-icon.png" alt="Solar">
+                    Solar Energy
+                </button>
+                <button class="energy-btn wind" data-type="wind">
+                    <img src="wind-icon.png" alt="Wind">
+                    Wind Energy
+                </button>
+            </div>
+            
+            <div id="mapViz"></div>
+            
+            <div class="timeline-controls">
+                <input type="range" id="yearSlider" min="2004" max="2024" value="2024" step="1">
+                <div class="year-labels">
+                    <span>2004</span>
+                    <span>2024</span>
+                </div>
+                <button id="toggleView">Toggle View</button>
+            </div>
+        </div>
+        
+        <div class="bottom-panel">
+            <div class="metrics-container">
+                <div class="gauge" id="tempGauge">
+                    <h3>Average Temp</h3>
+                </div>
+                <div class="gauge" id="cleanEnergyGauge">
+                    <h3>Clean Energy</h3>
+                </div>
+                <div class="gauge" id="goalGauge">
+                    <h3>Percentage of Goal Met</h3>
+                </div>
+                <div class="gauge" id="emissionGauge">
+                    <h3>CO² Emission</h3>
+                </div>
+            </div>
+            <div class="charts-container">
+                <div id="emissionsByLocation"></div>
+                <div id="energyByRegion"></div>
+                <div id="yearlyGoals"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
