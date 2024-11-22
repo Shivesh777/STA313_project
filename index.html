@@ -4,8 +4,12 @@
     <meta charset="UTF-8">
     <title>Energy Visualization Dashboard</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- External Libraries -->
     <script type="text/javascript" src="https://public.tableau.com/javascripts/api/tableau-2.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://d3js.org/topojson.v3.min.js"></script>
+    <script src="https://d3js.org/d3-geo.v2.min.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 </head>
 <body>
     <div class="dashboard-header">
@@ -15,68 +19,129 @@
     <div class="dashboard-container">
         <div class="left-panel">
             <div class="chart-container">
-                <div id="pieChart"></div>
-                <div id="trendChart"></div>
+                <div class="visualization-header">
+                    <h2>Energy Distribution</h2>
+                    <div id="vselect"></div>
+                </div>
+                <div id="pieChart" class="chart"></div>
+                <div id="trendChart" class="chart">
+                    <h3>Historical Energy Consumption</h3>
+                </div>
             </div>
         </div>
         
         <div class="right-panel">
             <div class="energy-types">
                 <button class="energy-btn renewable" data-type="renewable">
-                    <img src="wind-icon.png" alt="Renewable">
+                    <div class="btn-icon renewable-icon"></div>
                     Renewable Energy
                 </button>
                 <button class="energy-btn coal" data-type="coal">
-                    <img src="coal-icon.png" alt="Coal">
+                    <div class="btn-icon coal-icon"></div>
                     Coal Energy
                 </button>
                 <button class="energy-btn hydro" data-type="hydro">
-                    <img src="hydro-icon.png" alt="Hydro">
+                    <div class="btn-icon hydro-icon"></div>
                     Hydroelectric
                 </button>
                 <button class="energy-btn solar" data-type="solar">
-                    <img src="solar-icon.png" alt="Solar">
+                    <div class="btn-icon solar-icon"></div>
                     Solar Energy
                 </button>
                 <button class="energy-btn wind" data-type="wind">
-                    <img src="wind-icon.png" alt="Wind">
+                    <div class="btn-icon wind-icon"></div>
                     Wind Energy
                 </button>
             </div>
             
-            <div id="mapViz"></div>
+            <div class="map-container">
+                <div id="mapViz"></div>
+                <div id="countryInfo" class="country-info">
+                    <h3>Example Country Data</h3>
+                    <ul>
+                        <li>Main energy type: <span id="energyType"></span></li>
+                        <li>Magnitude: <span id="magnitude"></span></li>
+                        <li>Population: <span id="population"></span></li>
+                        <li>Yearly change: <span id="yearlyChange"></span></li>
+                        <li>Energy per GDP: <span id="energyGDP"></span></li>
+                    </ul>
+                </div>
+            </div>
             
             <div class="timeline-controls">
-                <input type="range" id="yearSlider" min="2004" max="2024" value="2024" step="1">
-                <div class="year-labels">
-                    <span>2004</span>
-                    <span>2024</span>
+                <div class="slider-container">
+                    <input type="range" id="yearSlider" min="2004" max="2024" value="2024" step="1">
+                    <div class="year-labels">
+                        <span>2004</span>
+                        <div class="timeline-ticks"></div>
+                        <span>2024</span>
+                    </div>
                 </div>
-                <button id="toggleView">Toggle View</button>
+                <div class="view-controls">
+                    <button id="toggleView" class="toggle-btn">
+                        Toggle View
+                    </button>
+                    <div class="view-options">
+                        <label>
+                            <input type="radio" name="dataView" value="intensity" checked>
+                            Per Capita Energy Intensity
+                        </label>
+                        <label>
+                            <input type="radio" name="dataView" value="total">
+                            Total Energy Use
+                        </label>
+                    </div>
+                </div>
             </div>
         </div>
         
         <div class="bottom-panel">
             <div class="metrics-container">
-                <div class="gauge" id="tempGauge">
-                    <h3>Average Temp</h3>
+                <div class="gauge-wrapper">
+                    <div class="gauge" id="tempGauge">
+                        <h3>Average Temp</h3>
+                        <div class="gauge-value"></div>
+                    </div>
                 </div>
-                <div class="gauge" id="cleanEnergyGauge">
-                    <h3>Clean Energy</h3>
+                <div class="gauge-wrapper">
+                    <div class="gauge" id="cleanEnergyGauge">
+                        <h3>Clean Energy</h3>
+                        <div class="gauge-value"></div>
+                    </div>
                 </div>
-                <div class="gauge" id="goalGauge">
-                    <h3>Percentage of Goal Met</h3>
+                <div class="gauge-wrapper">
+                    <div class="gauge" id="goalGauge">
+                        <h3>Percentage of Goal Met</h3>
+                        <div class="gauge-value"></div>
+                    </div>
                 </div>
-                <div class="gauge" id="emissionGauge">
-                    <h3>CO² Emission</h3>
+                <div class="gauge-wrapper">
+                    <div class="gauge" id="emissionGauge">
+                        <h3>CO² Emission</h3>
+                        <div class="gauge-value"></div>
+                    </div>
                 </div>
             </div>
             <div class="charts-container">
-                <div id="emissionsByLocation"></div>
-                <div id="energyByRegion"></div>
-                <div id="yearlyGoals"></div>
+                <div id="emissionsByLocation" class="bottom-chart">
+                    <h3>Emissions by Location</h3>
+                </div>
+                <div id="energyByRegion" class="bottom-chart">
+                    <h3>Energy by Region</h3>
+                </div>
+                <div id="yearlyGoals" class="bottom-chart">
+                    <h3>Yearly Goals vs Actual</h3>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- Load your custom scripts -->
+    <script src="js/map.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/gauges.js"></script>
+    <script src="js/timeline.js"></script>
+    <script src="js/tableau-integration.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
